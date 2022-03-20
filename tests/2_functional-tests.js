@@ -3,7 +3,7 @@ const chai = require("chai")
 const assert = chai.assert
 const server = require("../server")
 const Like = require("../db/schema/like")
-const { getSaltedIp, getIp } = require("../utils/encrypt")
+const { getSaltedIp } = require("../utils/encrypt")
 
 chai.use(chaiHttp)
 const baseUrl = "/api/stock-prices"
@@ -28,7 +28,7 @@ suite("Functional Tests", () => {
 
     const getHeader = await chai.request(server).get(baseUrl).query({ stock })
     // removing oldLike
-    const saltedIp = await getSaltedIp(getHeader.req.host)
+    const saltedIp = getSaltedIp(getHeader.req.host)
     await Like.deleteOne({ stock, like: saltedIp })
     const oldCount = await chai.request(server).get(baseUrl).query({ stock })
 
@@ -61,7 +61,7 @@ suite("Functional Tests", () => {
     assert.equal(oldCount.body.stockData.likes, newCount.body.stockData.likes)
 
     // removing the like
-    const saltedIp = await getSaltedIp(first.req.host)
+    const saltedIp = getSaltedIp(first.req.host)
     await Like.deleteOne({ stock, like: saltedIp })
   })
 
@@ -84,7 +84,7 @@ suite("Functional Tests", () => {
       .get(baseUrl)
       .query({ stock: stocks })
 
-    const saltedIp = await getSaltedIp(getHeaders.req.host)
+    const saltedIp = getSaltedIp(getHeaders.req.host)
 
     stocks.forEach(async st => {
       await Like.deleteOne({ stock: st, like: saltedIp })

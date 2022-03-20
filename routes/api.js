@@ -36,7 +36,7 @@ const prepStock = async (stock, like, headers) => {
 
   if (like) {
     const ip = getIp(headers)
-    const saltedIp = await getSaltedIp(ip)
+    const saltedIp = getSaltedIp(ip)
     const likedStock = await findLikedStock(stock, saltedIp)
 
     if (likedStock?.length <= 0) {
