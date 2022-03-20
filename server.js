@@ -17,7 +17,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
-      defaultSrc: ["'self'"],
+      "script-src": ["'self'"],
+      "style-src": ["'self'"]
     },
   })
 )
